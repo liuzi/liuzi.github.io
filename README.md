@@ -1,43 +1,34 @@
-# Chirpy Starter
+# [Liuzi's GitHub Pages Site](https://liuzi.github.io)
 
-[![Gem Version](https://img.shields.io/gem/v/jekyll-theme-chirpy)][gem]&nbsp;
-[![GitHub license](https://img.shields.io/github/license/cotes2020/chirpy-starter.svg?color=blue)][mit]
+Welcome to Liuzi's GitHub Pages site, powered by Jekyll and the Chirpy theme. This site is a collection of my learning notes, projects, and tutorials, with a focus on GenAI (e.g., LLMs, Diffusion Models, GAN, etc.) and its applications.
 
-When installing the [**Chirpy**][chirpy] theme through [RubyGems.org][gem], Jekyll can only read files in the folders
-`_data`, `_layouts`, `_includes`, `_sass` and `assets`, as well as a small part of options of the `_config.yml` file
-from the theme's gem. If you have ever installed this theme gem, you can use the command
-`bundle info --path jekyll-theme-chirpy` to locate these files.
+## About
 
-The Jekyll team claims that this is to leave the ball in the user’s court, but this also results in users not being
-able to enjoy the out-of-the-box experience when using feature-rich themes.
+This site is built using the [Chirpy theme-Starter Version](https://chirpy.cotes.page/posts/getting-started/#option-1-using-the-starter-recommended), which offers a clean and modern design, ideal for sharing content and ideas. The theme is highly customizable and extendable, making it an excellent choice for personal blogs and project showcases.
 
-To fully use all the features of **Chirpy**, you need to copy the other critical files from the theme's gem to your
-Jekyll site. The following is a list of targets:
+Setting up the development environment is straightforward. You can use Dev Containers with Visual Studio Code or Cursor IDEs for a seamless experience. For Mac users, it's recommended to use [Colima](https://github.com/abiosoft/colima) to start the Docker daemon efficiently, ensuring a smooth workflow.
 
-```shell
-.
-├── _config.yml
-├── _plugins
-├── _tabs
-└── index.html
-```
+Whether you're a beginner or an experienced developer, the Chirpy theme provides the tools you need to create a professional and engaging site.
 
-To save you time, and also in case you lose some files while copying, we extract those files/configurations of the
-latest version of the **Chirpy** theme and the [CD][CD] workflow to here, so that you can start writing in minutes.
+## Generative Models
 
-## Usage
+One of the key topics I explore on this site is generative models. You can read more about this in my post: [Generative Models](https://liuzi.github.io/posts/generative-models/). This post covers the basics of generative modeling, including:
 
-Check out the [theme's docs](https://github.com/cotes2020/jekyll-theme-chirpy/wiki).
+- The difference between discriminative and generative models
+- How generative models work
+- Applications of generative models in AI
 
-## Contributing
+## Getting Started with Chirpy
 
-This repository is automatically updated with new releases from the theme repository. If you encounter any issues or want to contribute to its improvement, please visit the [theme repository][chirpy] to provide feedback.
+If you're interested in setting up your own site using the Chirpy theme, you can follow these steps:
 
-## License
+1. **Create a Site Repository**: Use the Chirpy starter template to create a new repository on GitHub.
+2. **Set Up the Environment**: Follow the instructions to install Jekyll and set up your development environment.
+3. **Customize Your Site**: Modify the `_config.yml` file and other settings to personalize your site.
+4. **Deploy Your Site**: Use GitHub Actions or manually deploy your site to make it live.
 
-This work is published under [MIT][mit] License.
+For detailed instructions, visit the [Chirpy Getting Started Guide](https://chirpy.cotes.page/posts/getting-started/).
 
-[gem]: https://rubygems.org/gems/jekyll-theme-chirpy
-[chirpy]: https://github.com/cotes2020/jekyll-theme-chirpy/
-[CD]: https://en.wikipedia.org/wiki/Continuous_deployment
-[mit]: https://github.com/cotes2020/chirpy-starter/blob/master/LICENSE
+---
+
+Thank you for visiting my site. I hope you find the content informative and engaging!
