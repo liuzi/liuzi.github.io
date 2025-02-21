@@ -51,8 +51,9 @@ Let's consider a new task of spam classification. $$ x^{(i)} $$ is the feature v
 
 ### Example 1: Logistic Regression as a Discriminative Model
 
-Since the label $$y$$ can only take on values $$0$$ or $$1$$, it makes sense to choose a hypothesis $$h_{\theta}(x)$$ that ranges in $$[0,1]$$ to represent the probability of 
-$$p(y=1|x)$$. Then we can set the threshold of $$h_{\theta}(x)$$ to be $$0.5$$ to predict if an email is spam. Logistic function fits this case well as it ranges in $$[0,1]$$ for $$z\in(-\infty, +\infty)$$:
+Since it is a binary classification problem, it makes sense to choose a hypothesis $$h_{\theta}(x)$$ that ranges in $$[0,1]$$ to represent the probability of 
+$$p(y=1|x)$$, where 
+$$p(y=0|x) = 1 - h_{\theta}(x)$$. Then we can set the threshold of $$h_{\theta}(x)$$ to be $$0.5$$ to predict if an email is spam. Logistic function fits this case well as it ranges in $$[0,1]$$ for $$z\in(-\infty, +\infty)$$:
 
 $$
 h_{\theta}(x) = g(\theta^T x) = \frac{1}{1 + e^{-\theta^T x}}
@@ -68,7 +69,7 @@ is called the logistic function or sigmoid function. Below is a plot of the sigm
 
 ![Sigmoid Function](/assets/img/posts/sigmoid.png){: width="300" height="250" }
 
-From the plot, we can see $$g(z)$$ tends to $$0$$ as $$z\to-\infty$$ and tends to $$1$$ as $$z\to+\infty$$. When $$z=0$$, $$g(z)=0.5$$. $$g(z)$$ or $$h_{\theta}(x)$$ is always bounded between $$0$$ and $$1$$. To keep the convention of letting $$x_0=1$$, we can rewrite the expression of $$z$$ in the hypothesis as $$z = \theta^T x = \theta_0 + \sum_{j=1}^n \theta_i x_j$$, where $$\theta_0$$ is the bias term and $$\theta_j$$ is the weight of the $$j$$-th feature $$x_j$$. Please note that other functions that smoothly and monotonically increase from $$0$$ to $$1$$ can be also considered for $$h_{\theta}(x)$$.
+From the plot, we can see $$g(z)$$ tends to $$0$$ as $$z\to-\infty$$ and tends to $$1$$ as $$z\to+\infty$$. When $$z=0$$, $$g(z)=0.5$$. $$g(z)$$ or $$h_{\theta}(x)$$ is always bounded between $$0$$ and $$1$$. To keep the convention of letting $$x_0=1$$, we can rewrite the expression of $$z$$ in the hypothesis as $$z = \theta^T x = \theta_0 + \sum_{j=1}^n \theta_j x_j$$, where $$\theta_0$$ is the bias term and $$\theta_j$$ is the weight of the $$j$$-th feature $$x_j$$. Please note that other functions that smoothly and monotonically increase from $$0$$ to $$1$$ can be also considered for $$h_{\theta}(x)$$.
 
 <!-- to check:notes page22 -->
 
