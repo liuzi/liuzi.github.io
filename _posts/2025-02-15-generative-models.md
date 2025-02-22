@@ -51,9 +51,9 @@ Let's consider a new task of spam classification. $$ x^{(i)} $$ is the feature v
 
 ### Example 1: Logistic Regression as a Discriminative Model
 
-Since it is a binary classification problem, it makes sense to choose a hypothesis $$h_{\theta}(x)$$ that ranges in $$[0,1]$$ to represent the probability of 
+Since it is a binary classification problem, it makes sense to choose a hypothesis $$h_{\theta}(x)$$ that ranges in $$(0,1)$$ to represent the probability of 
 $$p(y=1|x)$$, where 
-$$p(y=0|x) = 1 - h_{\theta}(x)$$. Then we can set the threshold of $$h_{\theta}(x)$$ to be $$0.5$$ to predict if an email is spam. Logistic function fits this case well as it ranges in $$[0,1]$$ for $$z\in(-\infty, +\infty)$$:
+$$p(y=0|x) = 1 - h_{\theta}(x)$$. Then we can set the threshold of $$h_{\theta}(x)$$ to be $$0.5$$ to predict if an email is spam. Logistic function fits this case well as it ranges in $$(0,1)$$ for $$z\in(-\infty, +\infty)$$:
 
 $$
 h_{\theta}(x) = g(\theta^T x) = \frac{1}{1 + e^{-\theta^T x}}
@@ -71,7 +71,87 @@ is called the logistic function or sigmoid function. Below is a plot of the sigm
 
 From the plot, we can see $$g(z)$$ tends to $$0$$ as $$z\to-\infty$$ and tends to $$1$$ as $$z\to+\infty$$. When $$z=0$$, $$g(z)=0.5$$. $$g(z)$$ or $$h_{\theta}(x)$$ is always bounded between $$0$$ and $$1$$. To keep the convention of letting $$x_0=1$$, we can rewrite the expression of $$z$$ in the hypothesis as $$z = \theta^T x = \theta_0 + \sum_{j=1}^n \theta_j x_j$$, where $$\theta_0$$ is the bias term and $$\theta_j$$ is the weight of the $$j$$-th feature $$x_j$$. Please note that other functions that smoothly and monotonically increase from $$0$$ to $$1$$ can be also considered for $$h_{\theta}(x)$$.
 
-<!-- to check:notes page22 -->
+Now we can continue to use the maximum likelihood estimation to find the best parameters $$\theta$$ for logistic regression model. To indicate $$\theta$$ as the parameter vector in the conditional probability distribution 
+$$p(y|x)$$, we can rewrite the expression of $$p(y|x)$$ as:
+
+$$
+\begin{aligned}
+p(y=1|x;\theta) &= h_{\theta}(x) \\
+p(y=0|x;\theta) &= 1 - h_{\theta}(x) \\
+p(y|x;\theta) &= (h_{\theta}(x))^y (1-h_{\theta}(x))^{1-y}
+\end{aligned}
+$$
+
+Assume that n training examples are drawn independently from the same distribution, we can write the likelihood function of parameter $$\theta$$ as:
+
+$$
+\begin{aligned}
+L(\theta) &= p(\vec{y}|X;\theta) \\
+&= p(y^{(1)},y^{(2)},...,y^{(n)}|x^{(1)},x^{(2)},...,x^{(n)};\theta) \\
+&= \prod_{i=1}^n p(y^{(i)}|x^{(i)};\theta) \\
+&= \prod_{i=1}^n (h_{\theta}(x^{(i)}))^{y^{(i)}}(1-h_{\theta}(x^{(i)}))^{1-y^{(i)}} \\
+\end{aligned}
+$$
+
+Since it is easier to work with the log-likelihood function to maximize, we can take the logarithm of the likelihood function:
+
+$$
+\begin{aligned}
+\ell(\theta) = \log{L}(\theta) &= \log\prod_{i=1}^n (h_{\theta}(x^{(i)}))^{y^{(i)}}(1-h_{\theta}(x^{(i)}))^{1-y^{(i)}} \\
+&= \sum_{i=1}^n y^{(i)}\log h_{\theta}(x^{(i)}) + \sum_{i=1}^n (1-y^{(i)})\log(1-h_{\theta}(x^{(i)})) \\
+&= \left[\begin{array}{cccc}
+  y^{(1)} & y^{(2)} & \cdots & y^{(n)}  \\
+\end{array}\right]log
+\begin{bmatrix}
+  g(\theta^T x^{(1)})  \\
+  g(\theta^T x^{(2)}) \\
+  \vdots \\
+  g(\theta^T x^{(n)})
+\end{bmatrix} + 
+\left[\begin{array}{cccc}
+  1-y^{(1)} & 1-y^{(2)} & \cdots & 1-y^{(n)}  \\
+\end{array}\right]log
+\begin{bmatrix}
+  (1-g(\theta^T x^{(1)}))  \\
+  (1-g(\theta^T x^{(2)})) \\
+  \vdots \\
+  (1-g(\theta^T x^{(n)}))
+\end{bmatrix} \\
+&= y^T\log{g(X\theta)} + (1-y)^T\log{(1-g(X\theta))}
+\end{aligned}
+$$
+
+As we choose sigmoid function $$g(z)$$ to represent the hypothesis $$h_{\theta}(x)$$, let's firstly compute the derivative of $$g(z)$$ with respect to $$z$$:
+
+$$
+\begin{aligned}
+g^\prime(z) &= \frac{d}{dz}\frac{1}{1+e^{-z}} \\
+&= \frac{-1}{(1+e^{-z})^2}\frac{d}{dz}(1+e^{-z}) = \frac{-1}{(1+e^{-z})^2}(-e^{-z}) \\
+&= \frac{e^{-z}}{(1+e^{-z})^2} = \frac{1}{(1+e^{-z})}(1-\frac{1}{1+e^{-z}}) \\
+&= g(z)(1-g(z))
+\end{aligned}
+$$
+
+Then apply the chain rule to compute the derivative of $$\ell(\theta)$$ with respect to $$\theta$$. To make it simple, we only consider the derivative of $$\ell(\theta)$$ with respect to $$\theta_j$$ and for each training example $$x^{(i)}$$ and label $$y^{(i)}$$. As we only use sample $$i$$ to compute the derivative we can drop the index $$i$$ for convenience:
+
+$$
+\begin{aligned}
+\frac{\partial}{\partial \theta_j} \ell(\theta) &= \left(y\frac{1}{g(\theta^T{x})} - (1-y)\frac{1}{1-g(\theta^T{x})}\right)\frac{\partial}{\partial \theta_j}g(\theta^T{x}) \\
+&= \left(y\frac{1}{g(\theta^T{x})} - (1-y)\frac{1}{1-g(\theta^T{x})}\right)g(\theta^T{x})(1-g(\theta^T{x}))\frac{\partial}{\partial \theta_j}\theta^T{x} \\
+&= \left(y\frac{1}{g(\theta^T{x})} - (1-y)\frac{1}{1-g(\theta^T{x})}\right)g(\theta^T{x})(1-g(\theta^T{x}))x_j \\
+&= \left(y(1-g(\theta^T{x})) - (1-y)g(\theta^T{x})\right)x_j \\
+&= (y-h_{\theta}(x))x_j
+\end{aligned}
+$$
+
+Therefore gives us the stochastic gradient ascent rule, where $$(y^{(i)}-h_{\theta}(x^{(i)}))x_j^{(i)}$$ is the gradient of the loss function with respect to the $$i$$-th training example:
+
+$$
+\theta_j := \theta_j + \alpha(y^{(i)}-h_{\theta}(x^{(i)}))x_j^{(i)}
+$$
+
+
+
 
 ### Example 2: Gaussian Discriminant Analysis as a Generative Model
 
