@@ -155,7 +155,7 @@ $$
 
 ### Example 2: Gaussian Discriminant Analysis as a Generative Model
 
-Let's say the feature vector $$x$$ of an email is using TF-IDF[[2]](#references) that measures the importance of words in the email. TF-IDF (Term Frequency-Inverse Document Frequency) is a numerical statistic that reflects the importance of a word in a document relative to a collection of documents (corpus). It is calculated as:
+Let's say the feature vector $$x$$ of an email is using TF-IDF [[2]](#references) that measures the importance of words in the email. TF-IDF (Term Frequency-Inverse Document Frequency) is a numerical statistic that reflects the importance of a word in a document relative to a collection of documents (corpus). It is calculated as:
 
 $$
 \text{TF-IDF}(t, d) = \text{TF}(t, d) \times \text{IDF}(t)
@@ -205,7 +205,7 @@ $$
 
 ## References
 
-[1] Ng, Andrew. "[CS229: Machine Learning Course Notes](https://cs229.stanford.edu/main_notes.pdf)". Stanford University, 2018.
-[2] Manning, Christopher D., et al. "[Introduction to Information Retrieval](https://nlp.stanford.edu/IR-book/pdf/irbookprint.pdf)". Stanford University, 2009.
+[1] Andrew, Ng. "[CS229: Machine Learning Course Notes](https://cs229.stanford.edu/main_notes.pdf)". Stanford University, 2018. \\
+[2] Salton, Gerard & Michael J., McGill. "[Introduction to Modern Information Retrieval](https://archive.org/details/introductiontomo00salt)". McGraw-Hill, 1983. 
 
 
