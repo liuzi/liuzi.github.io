@@ -191,6 +191,79 @@ p(x|y=1) &= \frac{1}{(2\pi)^{n/2}|\Sigma|^{1/2}}exp\left(-\frac{1}{2}(x-\mu_1)^T
 \end{aligned}
 $$
 
+Therefore, the log-likelihood of the data is:
+
+$$
+\begin{aligned}
+\ell(\phi, \mu_0, \mu_1, \Sigma) &= \log\prod_{i=1}^n p(x^{(i)}, y^{(i)};\phi, \mu_0, \mu_1, \Sigma) \\
+&= \log\prod_{i=1}^n p(x^{(i)}|y^{(i)};\mu_0, \mu_1, \Sigma)p(y^{(i)};\phi) 
+\end{aligned}
+$$
+
+By maximizing the log-likelihood, we can derive the parameters of the model. The MLE estimates of the parameters are:
+
+$$
+\begin{aligned}
+\phi &= \frac{1}{n}\sum_{i=1}^n 1\{y^{(i)}=1\} \\
+\mu_0 &= \frac{\sum_{i=1}^n 1\{y^{(i)}=0\}x^{(i)}}{\sum_{i=1}^n 1\{y^{(i)}=0\}} \\
+\mu_1 &= \frac{\sum_{i=1}^n 1\{y^{(i)}=1\}x^{(i)}}{\sum_{i=1}^n 1\{y^{(i)}=1\}} \\
+\Sigma &= \frac{1}{n}\sum_{i=1}^n (x^{(i)}-\mu_{y^{(i)}})(x^{(i)}-\mu_{y^{(i)}})^T
+\end{aligned}
+$$
+
+The following figure shows the training set and the contours of two Gaussian distributions. These two Guassian distributions share the same covariance matrix $$\Sigma$$, leading to the same shape and orientation of the contours. But they have different means $$\mu_0$$ and $$\mu_1$$, leading to different positions of the contours. The straight line shown in the figure is the decision boundary at which 
+$$p(y=1|x) = 0.5$$. Thus on the left side of the line, the model predicts $$y=0$$ and on the right side, the model predicts $$y=1$$.
+
+![Gaussian Discriminant Analysis](/assets/img/posts/gaussian_discriminant_analysis.png){: width="450" height="300" }
+
+**Figure 1:** Gaussian Discriminant Analysis. Image source: Section 4.1.2 on page 40 from [Stanford CS229 Notes](https://cs229.stanford.edu/main_notes.pdf).
+{: .text-center .small}
+
+### Comparison between Discriminative and Generative Models
+
+Apply the Bayes' theorem to the generative model GDA (Gaussian Discriminant Analysis), we have:
+
+$$
+\begin{aligned}
+p(y=1|x) &= \frac{p(x|y=1)p(y=1)}{p(x|y=1)p(y=1) + p(x|y=0)p(y=0)} \\
+&= \frac{\exp\left\{ -\frac{1}{2} (x - \mu_1)^T \Sigma^{-1}(x - \mu_1) \right\} \phi}
+{\exp\left\{ -\frac{1}{2} (x - \mu_1)^T \Sigma^{-1} (x - \mu_1) \right\} \phi
++ \exp\left\{ -\frac{1}{2} (x - \mu_0)^T \Sigma^{-1} (x - \mu_0) \right\} (1 - \phi)} \\
+&= \frac{1}{1+\exp\left\{ -\frac{1}{2} (x - \mu_1)^T \Sigma^{-1} (x - \mu_1) + \frac{1}{2} (x - \mu_0)^T \Sigma^{-1} (x - \mu_0) \right\}  \frac{1 - \phi}{\phi}} \\
+&= \frac{1}{1 + \exp\left\{ -\left[ (\Sigma^{-1} (\mu_1 - \mu_0))^T x + \frac{1}{2} (\mu_0 + \mu_1)^T \Sigma^{-1} (\mu_0 - \mu_1)  
+- \ln \left( \frac{1 - \phi}{\phi} \right) \right]\right\} }\\
+\end{aligned}
+$$
+
+$$
+\begin{aligned}
+\theta &= \Sigma^{-1} (\mu_1 - \mu_0) \\
+\theta_0 &= \frac{1}{2} (\mu_0 + \mu_1)^T \Sigma^{-1} (\mu_0 - \mu_1) - \ln \left( \frac{1 - \phi}{\phi} \right)
+\end{aligned}
+$$
+
+From the derivation above, we found that
+$$p(y=1|x;\phi, \mu_0, \mu_1, \Sigma)$$ can actually be viewed as a function of $$x$$ in the following form:
+
+$$
+p(y=1|x;\phi, \mu_0, \mu_1, \Sigma) = \frac{1}{1+\exp(-\theta^T x)}
+$$
+
+This shows an interesting connection between generative and discriminative models: $$\theta$$ can be viewed as a function of $$\phi, \mu_0, \mu_1, \Sigma$$ from the GDA model. The form is exactly the same as the hypothesis function of the logistic regression model that is used to model the conditional probability 
+$$p(y=1|x)$$ in a discriminative way.
+
+Generally, generative models and discriminative models give different decision boundaries when trained on the same dataset. Following shows the difference between the generative GDA model and the discriminative logistic regression model:
+
+- For GDA, if 
+$$p(x|y)$$ is multivariate gaussian with shared covariance matrix, then $$p(y=1|x)$$ necessarily has the form of a sigmoid function. But the converse is not true: there exist discriminative models that do not have a generative counterpart.
+
+
+
+
+
+
+
+
 
 
 

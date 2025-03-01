@@ -1,6 +1,6 @@
 # [Liuzi's GitHub Pages Site](https://liuzi.github.io)
 
-Welcome to Liuzi's GitHub Pages site, powered by Jekyll and the Chirpy theme. This site is a collection of my learning notes, projects, and tutorials, with a focus on GenAI (e.g., LLMs, Diffusion Models, GAN, etc.) and its applications.
+Welcome to Liuzi's GitHub Pages site, powered by Jekyll and the Chirpy theme. This site is a collection of my learning notes, projects, and tutorials, with a focus on GenAI (e.g., Transformer, Diffusion Models, GAN, etc.) and its applications.
 
 ## About
 
