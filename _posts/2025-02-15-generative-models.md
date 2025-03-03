@@ -12,7 +12,7 @@ mermaid: true
 
 ## Introduction of Generative Models [[1]](#references)
 
-When discussing **generative models**, it's essential to understand how machine learning approaches tasks. Consider a scenario where we aim to distinguish between elephants and dogs, there are primarily two modeling approaches: discriminative and generative:
+When discussing **generative models**, it's essential to understand how machine learning approaches tasks. Consider a scenario where we aim to distinguish between elephants and dogs. There are primarily two modeling approaches: discriminative and generative:
 
 1. **Discriminative Modeling:** This approach involves building a model that directly predicts **classification labels** or identifies the **decision boundary** between elephants and dogs.
 2. **Generative Modeling:** This approach entails constructing separate models for elephants and dogs, capturing their **respective characteristics**. A new animal is then compared against each model to determine which it resembles more closely.
@@ -37,7 +37,7 @@ p(x) &= \sum_{y} p(x,y) \\
 \end{aligned}
 $$
 
-Actually $$p(x)$$ acts as a **normalization constant** as it does not depend on the label $$y$$. To be more specific, $$p(x)$$ does not change no matter how $$y$$ varies. So when calculating 
+Actually, $$p(x)$$ acts as a **normalization constant** since it does not depend on the label $$y$$. To be more specific, $$p(x)$$ remains unchanged regardless of how $$y$$ varies. Therefore, when calculating 
 $$p(y|x)$$, we do not need to compute $$p(x)$$:
 
 $$
@@ -47,13 +47,13 @@ $$
 \end{aligned}
 $$
 
-Let's consider a new task of spam classification. $$ x^{(i)} $$ is the feature vector of the $$i$$-th email, and $$ y^{(i)} $$ is the label indicating whether the email is spam ($$1$$) or not-spam ($$0$$). Following examples show how discriminative and generative models approach the same problem differently.
+Let's consider a new task of spam classification. $$ x^{(i)} $$ is the feature vector of the $$i$$-th email, and $$ y^{(i)} $$ is the label indicating whether the email is spam ($$1$$) or not spam ($$0$$). The following examples illustrate how discriminative and generative models approach the same problem differently.
 
 ### Example 1: Logistic Regression as a Discriminative Model
 
 Since it is a binary classification problem, it makes sense to choose a hypothesis $$h_{\theta}(x)$$ that ranges in $$(0,1)$$ to represent the probability of 
 $$p(y=1|x)$$, where 
-$$p(y=0|x) = 1 - h_{\theta}(x)$$. Then we can set the threshold of $$h_{\theta}(x)$$ to be $$0.5$$ to predict if an email is spam. Logistic function fits this case well as it ranges in $$(0,1)$$ for $$z\in(-\infty, +\infty)$$:
+$$p(y=0|x) = 1 - h_{\theta}(x)$$. We can set the threshold of $$h_{\theta}(x)$$ to be $$0.5$$ to predict if an email is spam. The logistic function fits this case well as it ranges in $$(0,1)$$ for $$z\in(-\infty, +\infty)$$:
 
 $$
 h_{\theta}(x) = g(\theta^T x) = \frac{1}{1 + e^{-\theta^T x}}
@@ -69,9 +69,9 @@ is called the logistic function or sigmoid function. Below is a plot of the sigm
 
 ![Sigmoid Function](/assets/img/posts/sigmoid.png){: width="300" height="250" }
 
-From the plot, we can see $$g(z)$$ tends to $$0$$ as $$z\to-\infty$$ and tends to $$1$$ as $$z\to+\infty$$. When $$z=0$$, $$g(z)=0.5$$. $$g(z)$$ or $$h_{\theta}(x)$$ is always bounded between $$0$$ and $$1$$. To keep the convention of letting $$x_0=1$$, we can rewrite the expression of $$z$$ in the hypothesis as $$z = \theta^T x = \theta_0 + \sum_{j=1}^n \theta_j x_j$$, where $$\theta_0$$ is the bias term and $$\theta_j$$ is the weight of the $$j$$-th feature $$x_j$$. Please note that other functions that smoothly and monotonically increase from $$0$$ to $$1$$ can be also considered for $$h_{\theta}(x)$$.
+From the plot, we can see that $$g(z)$$ tends to $$0$$ as $$z\to-\infty$$ and tends to $$1$$ as $$z\to+\infty$$. When $$z=0$$, $$g(z)=0.5$$. The function $$g(z)$$ or $$h_{\theta}(x)$$ is always bounded between $$0$$ and $$1$$. To maintain the convention of letting $$x_0=1$$, we can rewrite the expression of $$z$$ in the hypothesis as $$z = \theta^T x = \theta_0 + \sum_{j=1}^n \theta_j x_j$$, where $$\theta_0$$ is the bias term and $$\theta_j$$ is the weight of the $$j$$-th feature $$x_j$$. Please note that other functions that smoothly and monotonically increase from $$0$$ to $$1$$ can also be considered for $$h_{\theta}(x)$$.
 
-Now we can continue to use the maximum likelihood estimation to find the best parameters $$\theta$$ for logistic regression model. To indicate $$\theta$$ as the parameter vector in the conditional probability distribution 
+Now we can continue to use maximum likelihood estimation to find the best parameters $$\theta$$ for the logistic regression model. To indicate $$\theta$$ as the parameter vector in the conditional probability distribution 
 $$p(y|x)$$, we can rewrite the expression of $$p(y|x)$$ as:
 
 $$
@@ -82,7 +82,7 @@ p(y|x;\theta) &= (h_{\theta}(x))^y (1-h_{\theta}(x))^{1-y}
 \end{aligned}
 $$
 
-Assume that n training examples are drawn independently from the same distribution, we can write the likelihood function of parameter $$\theta$$ as:
+Assuming that $$n$$ training examples are drawn independently from the same distribution, we can write the likelihood function of parameter $$\theta$$ as:
 
 $$
 \begin{aligned}
@@ -121,7 +121,7 @@ $$
 \end{aligned}
 $$
 
-As we choose sigmoid function $$g(z)$$ to represent the hypothesis $$h_{\theta}(x)$$, let's firstly compute the derivative of $$g(z)$$ with respect to $$z$$:
+As we choose the sigmoid function $$g(z)$$ to represent the hypothesis $$h_{\theta}(x)$$, let's first compute the derivative of $$g(z)$$ with respect to $$z$$:
 
 $$
 \begin{aligned}
@@ -132,7 +132,7 @@ g^\prime(z) &= \frac{d}{dz}\frac{1}{1+e^{-z}} \\
 \end{aligned}
 $$
 
-Then apply the chain rule to compute the derivative of $$\ell(\theta)$$ with respect to $$\theta$$. To make it simple, we only consider the derivative of $$\ell(\theta)$$ with respect to $$\theta_j$$ and for each training example $$x^{(i)}$$ and label $$y^{(i)}$$. As we only use sample $$i$$ to compute the derivative we can drop the index $$i$$ for convenience:
+Then apply the chain rule to compute the derivative of $$\ell(\theta)$$ with respect to $$\theta$$. To simplify, we will only consider the derivative of $$\ell(\theta)$$ with respect to $$\theta_j$$ for each training example $$x^{(i)}$$ and label $$y^{(i)}$$. As we only use sample $$i$$ to compute the derivative, we can drop the index $$i$$ for convenience:
 
 $$
 \begin{aligned}
@@ -144,7 +144,7 @@ $$
 \end{aligned}
 $$
 
-Therefore gives us the stochastic gradient ascent rule, where $$(y^{(i)}-h_{\theta}(x^{(i)}))x_j^{(i)}$$ is the gradient of the log-likelihood function with respect to the $$i$$-th training example:
+This leads us to the stochastic gradient ascent rule, where $$(y^{(i)}-h_{\theta}(x^{(i)}))x_j^{(i)}$$ is the gradient of the log-likelihood function with respect to the $$i$$-th training example:
 
 $$
 \theta_j := \theta_j + \alpha(y^{(i)}-h_{\theta}(x^{(i)}))x_j^{(i)}
@@ -249,15 +249,17 @@ $$
 p(y=1|x;\phi, \mu_0, \mu_1, \Sigma) = \frac{1}{1+\exp(-\theta^T x)}
 $$
 
-This shows an interesting connection between generative and discriminative models: $$\theta$$ can be viewed as a function of $$\phi, \mu_0, \mu_1, \Sigma$$ from the GDA model. The form is exactly the same as the hypothesis function of the logistic regression model that is used to model the conditional probability 
-$$p(y=1|x)$$ in a discriminative way.
+This highlights a interesting link between generative and discriminative models: $$\theta$$ can be expressed as a function of $$\phi, \mu_0, \mu_1, \Sigma$$ from the GDA model. The form is identical to the hypothesis function of the logistic regression model, which is used to model the conditional probability 
+$$p(y=1|x)$$ in a discriminative manner.
 
-Generally, generative models and discriminative models give different decision boundaries when trained on the same dataset. Following shows the difference between the generative GDA model and the discriminative logistic regression model:
+Generally, generative models and discriminative models generate different decision boundaries when trained on the same dataset. The following points shows the differences between the generative GDA model and the discriminative logistic regression model:
 
 - For GDA, if 
-$$p(x|y)$$ is multivariate gaussian with shared covariance matrix, then $$p(y=1|x)$$ necessarily has the form of a sigmoid function. But the converse is not true: there exist discriminative models that do not have a generative counterpart.
+$$p(x|y)$$ is a multivariate Gaussian distribution with a shared covariance matrix, then $$p(y=1|x)$$ will necessarily take the form of a sigmoid function. However, the reverse is not true: set $$p(y=1|x)$$ to be a sigmoid function does not guarantee that $$p(x|y)$$ is a multivariate Gaussian. This indicates that the GDA model actually makes stronger assumptions than logistic regression.
 
+- Due to stronger assumptions, GDA performs well when the assumptions align with the actual data. Conversely, logistic regression with weaker assumptions, tends to be more robust across various data distributions, if sufficient training data is available.
 
+In summary, when there is prior knowledge about the data distribution, generative GDA is more efficient as it requires less training data. However, if the data distribution is unknown, discriminative logistic regression is preferable because it is less sensitive to the validity of prior assumptions, although it demands more data to approximate the real data distribution.
 
 
 
