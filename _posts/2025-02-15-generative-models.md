@@ -249,17 +249,16 @@ $$
 p(y=1|x;\phi, \mu_0, \mu_1, \Sigma) = \frac{1}{1+\exp(-\theta^T x)}
 $$
 
-This highlights a interesting link between generative and discriminative models: $$\theta$$ can be expressed as a function of $$\phi, \mu_0, \mu_1, \Sigma$$ from the GDA model. The form is identical to the hypothesis function of the logistic regression model, which is used to model the conditional probability 
-$$p(y=1|x)$$ in a discriminative manner.
+This reveals a profound connection between logistic regression and GDA: the parameters $$\theta$$ in logistic regression can be directly expressed as functions of the GDA parameters $$\phi, \mu_0, \mu_1, \Sigma$$. Remarkably, the resulting form is mathematically identical to the hypothesis function used in logistic regression, which models the conditional probability $$p(y=1|x)$$ discriminatively. This equivalence demonstrates how these seemingly different approaches can converge to similar mathematical formulations despite their distinct underlying philosophies.
 
-Generally, generative models and discriminative models generate different decision boundaries when trained on the same dataset. The following points shows the differences between the generative GDA model and the discriminative logistic regression model:
+Generally, generative models and discriminative models generate different decision boundaries when trained on the same dataset. The following points show the differences between the generative GDA model and the discriminative logistic regression model:
 
-- For GDA, if 
-$$p(x|y)$$ is a multivariate Gaussian distribution with a shared covariance matrix, then $$p(y=1|x)$$ will necessarily take the form of a sigmoid function. However, the reverse is not true: set $$p(y=1|x)$$ to be a sigmoid function does not guarantee that $$p(x|y)$$ is a multivariate Gaussian. This indicates that the GDA model actually makes stronger assumptions than logistic regression.
+- In the GDA model, when 
+  $$p(x|y)$$ follows a multivariate Gaussian distribution with a shared covariance matrix, $$p(y|x)$$ will necessarily take the form of a sigmoid function. However, the converse doesn't hold: defining $$p(y|x)$$ as a sigmoid function doesn't guarantee that $$p(x|y)$$ follows a multivariate Gaussian distribution. This demonstrates that GDA imposes stronger modeling assumptions than logistic regression.
 
-- Due to stronger assumptions, GDA performs well when the assumptions align with the actual data. Conversely, logistic regression with weaker assumptions, tends to be more robust across various data distributions, if sufficient training data is available.
+- Because of these stronger assumptions, GDA excels when these assumptions accurately reflect the underlying data distribution. In contrast, logistic regression, with its more flexible and weaker assumptions, demonstrates greater robustness across diverse data distributions, provided there's sufficient training data available.
 
-In summary, when there is prior knowledge about the data distribution, generative GDA is more efficient as it requires less training data. However, if the data distribution is unknown, discriminative logistic regression is preferable because it is less sensitive to the validity of prior assumptions, although it demands more data to approximate the real data distribution.
+To be more general, this comparison can be extended to all discriminative and generative models. Generative models learn the joint probability distribution p(x,y) and make stronger assumptions about the data, which is beneficial when these assumptions hold true and training data is limited. Discriminative models, on the other hand, directly learn the conditional probability p(y|x) without modeling the input distribution, making them more robust to misspecification of the data distribution but typically requiring larger datasets to achieve optimal performance.
 
 
 
