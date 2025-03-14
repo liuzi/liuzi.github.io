@@ -152,10 +152,10 @@ paginate: 10
 baseurl: ""
 
 # ------------ The following options are not recommended to be modified ------------------
-# math: true
+math: true
 kramdown:
   footnote_backlink: "&#8617;&#xfe0e;"
-  # math_engine: mathjax
+  math_engine: mathjax
   # input: GFM
   syntax_highlighter: rouge
   syntax_highlighter_opts: # Rouge Options › https://github.com/jneen/rouge#full-options
