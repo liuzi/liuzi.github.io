@@ -278,7 +278,7 @@ For instance, when classifying grayscale images of digits (like in the MNIST dat
 
 How can we effectively model the joint probability distribution over all variables $$\{x_1, x_2, ..., x_n\}$$? To specify this distribution completely, we would need to estimate $$2^{n}-1$$ parameters (where n=784 in our digit example), with the last parameter determined by the constraint that probabilities must sum to 1. This exponential growth in parameters makes direct estimation practically impossible.
 
-The solution lies in factorizing the joint probability distribution into a product of simpler conditional probability distributions (CPDs) that require fewer parameters to estimate. Let's explore several approaches to factorization:
+The solution lies in factorizing the joint probability distribution into a product of simpler **conditional probability distributions (CPDs)** that require fewer parameters to estimate. Let's explore several approaches to factorization:
 
 ### Factorization Approaches for Joint Distributions
 
@@ -395,7 +395,7 @@ In the generative approach, we explicitly model both $$p(y)$$ (class prior) and
 $$p(\mathbf{x}|y)$$ (conditional density for continuous features or conditional probability for discrete features) to represent $$p(\mathbf{x},y)$$.
 
 Alternatively, the **discriminative approach** directly models 
-$$p(y|\mathbf{x})$$ without explicitly representing how the features themselves are generated. Using the chain rule, $$p(\mathbf{x},y) = p(y)p(\mathbf{x}|y) = p(\mathbf{x})p(y|\mathbf{x})$$, we can see that for classification purposes, we only need to learn $$p(y|\mathbf{x})$$ since $$p(\mathbf{x})$$ is already given by the input data.
+$$p(y|\mathbf{x})$$ without explicitly representing how the features themselves are generated. Using the chain rule, $$p(\mathbf{x},y) = p(y)p(\mathbf{x}|y) = p(\mathbf{x})p(y|\mathbf{x})$$, we can see that for classification purposes, we only need to learn $$p(y|\mathbf{x})$$ without modeling $$p(\mathbf{x})$$.
 
 Maintaining all dependencies in a generative model by applying the chain rule would give us:
 
@@ -414,7 +414,102 @@ $$
 **Figure 4:** Visual representation of generative models (left) vs discriminative models (right). In generative models, we model how Y generates X values, while in discriminative models, we model how X values determine Y. Image source: [Stanford CS236 Lecture 2](https://deepgenerativemodels.github.io/assets/slides/cs236_lecture2.pdf).
 {: .text-center .small}
 
-## TO FINISH
+From the figure above, we can observe that generative models are inherently more complex because they must model the joint distribution $$p(\mathbf{x},y)$$. This complexity stems from the need to capture the complete data generation process, which requires estimating a larger number of parameters. However, this doesn't necessarily mean that learning discriminative models is significantly easier. In high-dimensional feature spaces,  discriminative models also encounter significant challenges. For example, when features $$\mathbf{x}$$ are binary, discriminative models still need to estimate $$2^n$$ parameters for 
+$$p(y|x_1,x_2,...,x_n)$$. Both approaches face computational and statistical challenges that grow with the dimensionality of the data, though they differ in how they allocate model complexity.
+
+
+### More Efficient Approaches for Representing CPDs
+
+Based on our previous discussion, we've seen that representing conditional probability distributions (CPDs) using explicit tables becomes intractable as dimensionality increases. For discriminative models, we would need to store $$2^n$$ parameters for 
+$$p(y|x_1,x_2,...,x_n)$$, while generative models would require even more—$$2^{n+1}-1$$ parameters, just for binary features. To address this challenge, we can employ several more efficient representation strategies:
+
+1. Exploit conditional independence assumptions to reduce parameter space
+2. Use parametric models with linear dependencies to represent probabilistic relationships
+3. Employ neural networks to capture complex nonlinear relationships
+
+#### 1. Exploiting Conditional Independence
+
+The most straightforward approach is to simplify the Bayesian network structure by introducing conditional independence assumptions. In the generative naive Bayes model, for instance, we assume all features are conditionally independent given the class label:
+
+$$
+p(\mathbf{x},y) = p(y) \prod_{i=1}^n p(x_i|y)
+$$
+
+This dramatically reduces the parameter count from exponential to linear ($$n+1$$) in the number of features. However, this approach has significant limitations—the strong conditional independence assumptions may eliminate crucial dependencies between features, leading to suboptimal model performance. As we saw in our earlier example with digit generation in [Figure 3](#1-independence-assumption), assuming independence between pixels produces incoherent images that lack structural integrity. To balance computational efficiency with model expressiveness, we can employ functional representations that automatically capture probabilistic relationships between variables without requiring explicit human specification of the dependency structure.
+
+#### 2. Logistic Regression for Linear Dependency
+
+Recall the [example on logistic regression](#example-1-logistic-regression-as-a-discriminative-model), we can model 
+$$p(y|\mathbf{x})$$ as a parametric function that maps features $$\mathbf{x}$$ to conditional probability values:
+
+$$
+\begin{aligned}
+z(\mathbf{x};\mathbf{\theta}) &= \theta^T\mathbf{x} = \theta_0 + \sum_{i=1}^n \theta_i x_i \\
+p(y=1|\mathbf{x};\mathbf{\theta}) &= \sigma(z(\mathbf{x};\mathbf{\theta})) = \frac{1}{1+\exp(-z(\mathbf{x};\mathbf{\theta}))}
+\end{aligned}
+$$
+
+Here, we use a linear function $$z(\mathbf{x};\mathbf{\theta})$$ to model the relationship between features $$\mathbf{x}$$ and label $$y$$, then apply the sigmoid function $$\sigma(z)$$ to map this linear output to probability values. This approach also requires only $$n+1$$ parameters, making it computationally efficient.
+
+Unlike naive Bayes, logistic regression doesn't assume conditional independence among features, allowing it to capture more complex feature interactions through the linear combination of inputs. This makes it more flexible while maintaining computational efficiency.
+
+#### 3. Neural Networks for Complex Dependencies
+
+For more complex relationships that cannot be adequately captured by linear models, neural networks provide a powerful solution by introducing nonlinear transformations of the input features. Each transformation can be represented as $$h(w,b,\mathbf{x})=f(w^T\mathbf{x}+b)$$, where $$f$$ is a nonlinear activation function. By stacking multiple such transformations in sequence, we create a neural network as follows:
+
+
+$$
+\begin{aligned}
+h^{(1)} &= f^{(1)}(W^{(1)}\mathbf{x} + b^{(1)}) \\
+h^{(2)} &= f^{(2)}(W^{(2)}h^{(1)} + b^{(2)}) \\
+&\vdots \\
+p_{neural}(y=1|\mathbf{x};\theta,W,\mathbf{b}) &= \sigma(W^{(L)}h^{(L-1)} + b^{(L)})
+\end{aligned}
+$$
+
+Where $$f^{(l)}$$ represents non-linear activation functions like ReLU, tanh, or sigmoid at layer $$l$$. With sufficient hidden units, neural networks can approximate arbitrarily complex functions—a property known as universal approximation. While they introduce more parameters than logistic regression, they remain far more parameter-efficient than explicit CPD tables for high-dimensional data.
+
+#### Comparing Approaches: From Bayesian Networks to Neural Networks
+
+Let's compare how different approaches model the joint probability distribution:
+
+**Full Chain Rule** provides a mathematically exact full expression but computationally intractable factorization.
+  
+$$p(x_1,x_2,...,x_n) = p(x_1)p(x_2|x_1)p(x_3|x_1,x_2)...p(x_n|x_1,x_2,...,x_{n-1})$$
+
+
+**Bayesian Networks** introduce conditional independence assumptions to reduce complexity. While more efficient, these hand-crafted independence assumptions may oversimplify complex relationships and require domain expertise to design effectively.
+
+$$p(x_1,x_2,...,x_n) \approx p(x_1)p(x_2|x_1)p(x_3|\not{x_1},x_2)...p(x_n|\not{x_1},...,\not{x_{n-2}},x_{n-1})$$
+
+**Neural Network Models** revolutionize probabilistic modeling by automatically learning complex dependencies between variables without requiring explicit independence assumptions. They parameterize conditional distributions using flexible neural architectures that assume specific functional forms for the conditionals. A key advantage is that sufficiently deep neural networks can approximate any function with arbitrary precision—a property known as universal function approximation.
+   
+$$p(x_1,x_2,...,x_n) \approx p(x_1)p(x_2|x_1)p_{neural}(x_3|x_1,x_2)...p_{neural}(x_n|x_1,...,x_{n-1})$$
+   
+   Neural networks offer several critical advantages for modern applications:
+   - **Automatic feature learning**: They discover relevant dependencies without requiring explicit specification
+   - **Scalability**: They handle massive datasets and high-dimensional spaces efficiently
+   - **Flexibility**: They capture complex non-linear relationships that traditional models cannot represent
+   - **Transfer learning**: Pre-trained neural models can adapt to new domains with minimal additional training
+   - **End-to-end optimization**: They optimize all parameters simultaneously rather than in separate stages
+
+In real-world applications like image generation, language modeling, and drug discovery, neural approaches have dramatically outperformed traditional probabilistic graphical models. For instance, modern text-to-image models like DALL-E and Stable Diffusion can generate photorealistic images from textual descriptions—a task that would be impossible with traditional Bayesian networks due to the complexity of the underlying distributions and the high-dimensional nature of the data.
+
+
+## Modern Deep Generative Models  TODO
+
+Modern deep generative models extend these ideas using neural networks to learn complex conditional probability distributions. These include:
+
+1. **Autoregressive Models** - Model the joint distribution as a product of conditionals, often using recurrent or masked architectures
+2. **Generative Adversarial Networks (GANs)** - Use an adversarial process to generate highly realistic samples
+3. **Diffusion Models** - Build a Markov chain that gradually adds noise to the data until it becomes a simple distribution
+4. **Normalizing Flows** - Transform simple distributions into complex ones through invertible transformations
+5. **Variational Autoencoders (VAEs)** - Learn a latent space representation that captures the data distribution
+
+These approaches maintain the spirit of Bayesian networks but leverage the expressive power of neural networks to model complex dependencies in high-dimensional data. 
+
+
+
 
 <!-- 
 #### Learning and Inference in Bayesian Networks -need to be verified
