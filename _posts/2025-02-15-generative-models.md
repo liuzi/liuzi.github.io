@@ -460,10 +460,10 @@ For more complex relationships that cannot be adequately captured by linear mode
 
 $$
 \begin{aligned}
-h^{(1)} &= f^{(1)}(W^{(1)}\mathbf{x} + b^{(1)}) \\
-h^{(2)} &= f^{(2)}(W^{(2)}h^{(1)} + b^{(2)}) \\
+h^{(1)} &= f^{(1)}(w^{(1)T}\mathbf{x} + b^{(1)}) \\
+h^{(2)} &= f^{(2)}(w^{(2)T}h^{(1)} + b^{(2)}) \\
 &\vdots \\
-p_{neural}(y=1|\mathbf{x};\theta,W,\mathbf{b}) &= \sigma(W^{(L)}h^{(L-1)} + b^{(L)})
+p_{neural}(y=1|\mathbf{x};\theta,W,\mathbf{b}) &= \sigma(\theta^{T}[h^{(L-1)},1])
 \end{aligned}
 $$
 
